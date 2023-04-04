@@ -119,3 +119,87 @@ kadmin.local:  list_principals
 ![Realm](images/kdc/all_principals.png)
 
 ## 5-Setting The Service
+
+We start by installing those packages
+```
+sudo apt-get update
+sudo apt-get install krb5-user libpam-krb5 libpam-ccreds
+```
+
+the same prompts as in the KDC server will appear and we need to enter the same informations used for the KDC server.
+ - Realm : INSAT.TN
+ - Kerberos Server : kdc.insat.tn
+ - Administrative Server : kdc.insat.tn
+
+
+Now let's create the keytab
+```
+ktutil 
+ktutil:  add_entry -password -p service/service.insat.tn@INSAT.TN -k 1 -e aes256-cts-hmac-sha1-96
+ktutil:  wkt service.keytab
+```
+![Realm](images/keytab/1.png)
+
+We need to send the keytab from the KDC machine to the Service machine.
+To do that we need to install openssh server with this command
+```
+sudo apt-get install openssh-server
+```
+
+In Service machine, we create a folder named "service" to store the keytab
+```
+mkdir service
+```
+
+then we go back to the KDC server send the file with this command
+```
+scp service.keytab ines@service.insat.tn:/home/service
+```
+![Realm](images/keytab/2.png)
+
+We can verify in the Service machine if the keytab file was successfully sent
+![Realm](images/keytab/3.png)
+
+We now execute these commands to verify that the service principal was succesfully extracted from the KDC database
+```
+ktutil
+ktutil:  list
+ktutil:  read_kt service/service.keytab
+ktutil:  list
+```
+![Realm](images/keytab/4.png)
+
+#### Installing and Configuring Squid
+Squid is a popular open-source caching proxy server that can be used to improve the performance of web servers by caching frequently accessed web pages and serving them from memory instead of fetching them from the web server each time they are requested.
+
+To install we execute :
+```
+sudo apt-get upgrade
+sudo apt-get install squid
+```
+
+To configure it
+```
+sudo gedit /etc/squid/squid.conf
+```
+we add those lines in the file
+``` 
+auth_param negotiate porgram /usr/lib/squid/negotiate_kerberos_auth -r INSAT.TN
+auth_param negotiate children 10
+auth_param neogtiate keep_alive on
+acl auth proxy_auth REQUIRED
+http_access allow auth
+```
+![Realm](images/squid/1.png)
+
+## 6-Setting The Client Machine
+We start by installing those packages (same as the service server)
+```
+sudo apt-get update
+sudo apt-get install krb5-user libpam-krb5 libpam-ccreds
+```
+
+the same prompts as in the KDC server will appear and we need to enter the same informations used for the KDC server.
+ - Realm : INSAT.TN
+ - Kerberos Server : kdc.insat.tn
+ - Administrative Server : kdc.insat.tn
