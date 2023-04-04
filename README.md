@@ -1,5 +1,11 @@
 # Squid_Auth_Kerberos
 
+Made by : 
+[Amal Sammari](https://github.com/Amal1999)
+[Safa Laabidi](https://github.com/safa-abidi)
+[Ines Achour](https://github.com/inesachour)
+
+
 ## 1-Changing Hostnames
 We start by executing this command
 ```
