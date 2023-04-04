@@ -55,3 +55,67 @@ nslookup kdc
 ping kdc
 ```
 ![Ping](images/etc_hosts/ping2.png)
+
+## 4-Setting The KDC
+
+Now that all our 3 machines can communicate we need to set the KDC server.
+We first start exectuing these commands in order to install krb5-kdc, krb5-admin-server and krb5-config libraries needed for this step:
+```
+sudo apt-get update
+sudo apt-get install krb5-kdc krb5-admin-server krb5-config
+```
+
+When installing the packages, some prompts will appear in order to configure the KDC server
+
+Realm : INSAT.TN (must be in uppercase)
+![Realm](images/kdc/1.png)
+
+Kerberos server : kdc.insat.tn
+![Realm](images/kdc/2.png)
+
+Administrative server : kdc.insat.tn (in our case it's the same as the kdc server)
+![Realm](images/kdc/3.png)
+
+We now execute this command :
+```
+sudo krb5_newrealm
+```
+![Realm](images/kdc/4.png)
+
+#### Adding The Principals:
+
+Now we need to add the principals needed(users and services are considered as principals)
+
+So we start with the admin principals:
+```
+sudo kadmin.local
+kadmin.local:  add_principal root/admin
+```
+![Realm](images/kdc/admin_principal.png)
+
+We verify that the principal is created
+```
+kadmin.local:  list_principals
+```
+![Realm](images/kdc/admin_principal2.png)
+
+Next, we need to grant all access rights to the Kerberos database to admin principal root/admin in the configuration file /etc/krb5kdc/kadm5.acl
+```
+sudo nano /etc/krb5kdc/kadm5.acl
+```
+![Realm](images/kdc/admin_principal3.png)
+
+Now we create the other 2 principals with theses 2 commands : 
+```
+kadmin.local:  add_principal client
+kadmin.local:  add_principal service/service.insat.tn
+```
+![Realm](images/kdc/other_principals.png)
+
+Now we verify if they were added successfully
+```
+kadmin.local:  list_principals
+```
+![Realm](images/kdc/all_principals.png)
+
+## 5-Setting The Service
