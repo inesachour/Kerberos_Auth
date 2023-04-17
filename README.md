@@ -17,18 +17,19 @@ We do this step for the 2 other machines (service and client machines).
 
 ![Changing Hostname](images/ips_hostnames/Service/hostname.png)
 
-![Changing Hostname](images/ips_hostnames/Client/hostname.png)
+(Client's hostname: client.insat.tn)
 
 ## 2- Getting IP Adresses
 Now we need to get the IP Adresses of all the three machines. We can use this command to do that
 ```
 hostname -I
 ```
-![Displaying IP](images/ips_hostnames/KDC/ip.png)
-
-![Displaying IP](images/ips_hostnames/Service/ip.png)
-
-![Displaying IP](images/ips_hostnames/Client/ip.png)
+```
+In ou cases the IP adresses found are :
+KDC: 192.168.56.104
+Service: 192.168.56.105
+Client: 192.168.56.106
+```
 
 Note : All 3 machines need to have a Host-only Adapter.
 
@@ -41,26 +42,30 @@ sudo nano /etc/hosts
 ```
 and we add these 3 lines in the /etc/hosts file for all of 3 machines
 ```
-192.168.56.129  kdc.insat.tn kdc
-192.168.56.128  service.insat.tn service
-192.168.56.130  client.insat.tn client
+192.168.56.104  kdc.insat.tn kdc
+192.168.56.105  service.insat.tn service
+192.168.56.106  client.insat.tn client
 ```
 
 ![Changing /etc/hosts](images/etc_hosts/etc_hosts.png)
 
 Now we can test our configuration by executing for example in kdc machine:
 ```
-nslookup service
-ping service
+nslookup client
 ```
-![Ping](images/etc_hosts/ping1.png)
+![nslookup](images/etc_hosts/nslookup.png)
 
-and in service machine: 
+We can test the communication with: 
 ```
-nslookup kdc
-ping kdc
+ping client
 ```
 ![Ping](images/etc_hosts/ping2.png)
+
+and in client machine we can try: 
+```
+ping kdc
+```
+![Ping](images/etc_hosts/ping1.png)
 
 ## 4-Setting The KDC
 
@@ -97,13 +102,11 @@ So we start with the admin principals:
 sudo kadmin.local
 kadmin.local:  add_principal root/admin
 ```
-![Realm](images/kdc/admin_principal.png)
 
 We verify that the principal is created
 ```
 kadmin.local:  list_principals
 ```
-![Realm](images/kdc/admin_principal2.png)
 
 Next, we need to grant all access rights to the Kerberos database to admin principal root/admin in the configuration file /etc/krb5kdc/kadm5.acl
 ```
@@ -113,10 +116,9 @@ sudo nano /etc/krb5kdc/kadm5.acl
 
 Now we create the other 2 principals with theses 2 commands : 
 ```
-kadmin.local:  add_principal client
-kadmin.local:  add_principal service/service.insat.tn
+kadmin.local:  add_principal safa
+kadmin.local:  add_principal postgres/pg.insat.tn
 ```
-![Realm](images/kdc/other_principals.png)
 
 Now we verify if they were added successfully
 ```
@@ -141,8 +143,8 @@ the same prompts as in the KDC server will appear and we need to enter the same 
 Now let's create the keytab
 ```
 ktutil 
-ktutil:  add_entry -password -p service/service.insat.tn@INSAT.TN -k 1 -e aes256-cts-hmac-sha1-96
-ktutil:  wkt service.keytab
+ktutil:  add_entry -password -p postgres/pg.insat.tn@INSAT.TN -k 1 -e aes256-cts-hmac-sha1-96
+ktutil:  wkt postgres.keytab
 ```
 ![Realm](images/keytab/1.png)
 
@@ -152,16 +154,15 @@ To do that we need to install openssh server with this command
 sudo apt-get install openssh-server
 ```
 
-In Service machine, we create a folder named "service" to store the keytab
+In Service machine, we create a folder named "pgsql/data" to store the keytab
 ```
-mkdir service
+mkdir -p pgsql/data
 ```
 
 then we go back to the KDC server send the file with this command
 ```
-scp service.keytab ines@service.insat.tn:/home/service
+scp postgres.keytab safa@pg.insat.tn:/home/safa/pgsql/data
 ```
-![Realm](images/keytab/2.png)
 
 We can verify in the Service machine if the keytab file was successfully sent
 ![Realm](images/keytab/3.png)
@@ -170,33 +171,20 @@ We now execute these commands to verify that the service principal was succesful
 ```
 ktutil
 ktutil:  list
-ktutil:  read_kt service/service.keytab
+ktutil:  read_kt pgsql/data/postgres.keytab
 ktutil:  list
 ```
+![Realm](images/keytab/4.1.png)
 ![Realm](images/keytab/4.png)
 
-#### Installing and Configuring Squid
+#### Installing and Configuring Postgresql
 Squid is a popular open-source caching proxy server that can be used to improve the performance of web servers by caching frequently accessed web pages and serving them from memory instead of fetching them from the web server each time they are requested.
 
 To install we execute :
 ```
 sudo apt-get upgrade
-sudo apt-get install squid
-```
 
-To configure it
 ```
-sudo gedit /etc/squid/squid.conf
-```
-we add those lines in the file
-``` 
-auth_param negotiate porgram /usr/lib/squid/negotiate_kerberos_auth -r INSAT.TN
-auth_param negotiate children 10
-auth_param neogtiate keep_alive on
-acl auth proxy_auth REQUIRED
-http_access allow auth
-```
-![Realm](images/squid/1.png)
 
 ## 6-Setting The Client Machine
 We start by installing those packages (same as the service server)
