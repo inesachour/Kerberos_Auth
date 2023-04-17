@@ -227,11 +227,17 @@ We can try by executing this command in the client machine:
 ```
 psql -d safa -h pg.insat.tn -U safa
 ```
+![postgres db](images/test/1.png)
 The connectiong to PorstreSQL will fail because we don't have a TGT yet
 We generate one with this command:
 ```
 klist
 kinit safa
 ```
+![postgres db](images/test/2.png)
 
 Now we try to connect again:
+![postgres db](images/test/3.png)
+
+Now we can check the client's tickets so we can verify that we have the ST (service ticket)
+![postgres db](images/test/4.png)
