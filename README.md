@@ -1,4 +1,4 @@
-# Squid_Auth_Kerberos
+# Kerberos Auth Project
 
 Made by : 
 [Amal Sammari](https://github.com/Amal1999)
