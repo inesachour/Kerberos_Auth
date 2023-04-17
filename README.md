@@ -237,6 +237,7 @@ kinit safa
 ![postgres db](images/test/2.png)
 
 Now we try to connect again:
+
 ![postgres db](images/test/3.png)
 
 Now we can check the client's tickets so we can verify that we have the ST (service ticket)
