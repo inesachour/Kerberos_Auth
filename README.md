@@ -38,7 +38,7 @@ Note : All 3 machines need to have a Host-only Adapter.
 The next step is to add the IP adresses of the three machines in /etc/hosts files.
 We execute this command : 
 ```
-sudo nano /etc/hosts
+sudo gedit /etc/hosts
 ```
 and we add these 3 lines in the /etc/hosts file for all of 3 machines
 ```
@@ -110,7 +110,7 @@ kadmin.local:  list_principals
 
 Next, we need to grant all access rights to the Kerberos database to admin principal root/admin in the configuration file /etc/krb5kdc/kadm5.acl
 ```
-sudo nano /etc/krb5kdc/kadm5.acl
+sudo gedit /etc/krb5kdc/kadm5.acl
 ```
 ![Realm](images/kdc/admin_principal3.png)
 
@@ -183,7 +183,30 @@ Squid is a popular open-source caching proxy server that can be used to improve 
 To install we execute :
 ```
 sudo apt-get upgrade
+sudo apt-get install postgresql postgresql-contrib
 
+```
+
+We start by creating role for the client:
+![postgres db](images/postgresql/1.png)
+
+Now we need to configure the "/etc/postgresql/12/main/postgresql.conf" file to change those two line
+```
+listen_addresses = '*'
+krb_server_keyfile = '/home/safa/pgsql/data/postgres.keytab'
+```
+![postgres db](images/postgresql/2.png)
+
+In the file pg_hba.conf we add the following line
+```
+# IPv4 local connections:
+hostgssenc  safa   safa  192.168.56.0/24    gss include_realm=0 krb_realm=INSAT.TN
+```
+![postgres db](images/postgresql/3.png)
+
+After these chagements we execute this command to restart the service
+```
+sudo systemctl restart postgresql
 ```
 
 ## 6-Setting The Client Machine
@@ -197,3 +220,18 @@ the same prompts as in the KDC server will appear and we need to enter the same 
  - Realm : INSAT.TN
  - Kerberos Server : kdc.insat.tn
  - Administrative Server : kdc.insat.tn
+
+## 7-Testing the authentication
+
+We can try by executing this command in the client machine:
+```
+psql -d safa -h pg.insat.tn -U safa
+```
+The connectiong to PorstreSQL will fail because we don't have a TGT yet
+We generate one with this command:
+```
+klist
+kinit safa
+```
+
+Now we try to connect again:
