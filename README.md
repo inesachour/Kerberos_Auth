@@ -14,7 +14,8 @@ The Authentication Process
 2. The AS verifies the user's identity and send back an encrypted TGT 
 3. The user decrypts the TGT and sends it to the ticket-granting server (TGS) for a service ticket.
 4. The TGS verifies the TGT and send a service ticket back.
-5. The user receives the service ticket and sends it to the service service and now he can access the requested service.
+5. The user receives the service ticket and sends it to the service server.
+6. Now the client can acces the requested service
 ![Kerberos](images/intro/Kerberos_process.png)
 
 __PostgreSQL__ is a well known relational database management system that uses SQL and is known for its performance, scalability, reliability, and security.
