@@ -68,6 +68,7 @@ ping client
 and in client machine we can try: 
 ```
 ping kdc
+nslookup kdc
 ```
 ![Ping](images/etc_hosts/ping1.png)
 
