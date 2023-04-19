@@ -8,16 +8,16 @@ Made by :
 
 ## Introduction
 
-- __Kerberos__ is a protocol for authenticating service requests. It works on the basis of tickets.
-- The Authentication Process
-    1- The user requests the service and sends a request for ticket-granting ticket (TGT) to the Kerberos authentication server (AS).
-    2- The AS verifies the user's identity and send back an encrypted TGT 
-    3- The user decrypts the TGT and sends it to the ticket-granting server (TGS) for a service ticket.
-    4- The TGS verifies the TGT and send a service ticket back.
-    5- The user receives the service ticket and sends it to the service service and now he can access the requested service.
+__Kerberos__ is a protocol for authenticating service requests. It works on the basis of tickets.
+The Authentication Process
+    - 1- The user requests the service and sends a request for ticket-granting ticket (TGT) to the Kerberos authentication server (AS).
+    - 2- The AS verifies the user's identity and send back an encrypted TGT 
+    - 3- The user decrypts the TGT and sends it to the ticket-granting server (TGS) for a service ticket.
+    - 4- The TGS verifies the TGT and send a service ticket back.
+    - 5- The user receives the service ticket and sends it to the service service and now he can access the requested service.
 ![Kerberos](images/intro/Kerberos_process.png)
 
-- __PostgreSQL__ is a well known relational database management system that uses SQL and is known for its performance, scalability, reliability, and security.
+__PostgreSQL__ is a well known relational database management system that uses SQL and is known for its performance, scalability, reliability, and security.
 
 ## 1- Changing Hostnames
 
