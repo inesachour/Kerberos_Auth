@@ -25,7 +25,7 @@ Now we need to get the IP Adresses of all the three machines. We can use this co
 hostname -I
 ```
 ```
-In ou cases the IP adresses found are :
+In our case the IP adresses found are :
 KDC: 192.168.56.104
 Service: 192.168.56.105
 Client: 192.168.56.106
@@ -43,7 +43,7 @@ sudo gedit /etc/hosts
 and we add these 3 lines in the /etc/hosts file for all of 3 machines
 ```
 192.168.56.104  kdc.insat.tn kdc
-192.168.56.105  service.insat.tn service
+192.168.56.105  pg.insat.tn pg
 192.168.56.106  client.insat.tn client
 ```
 
@@ -75,6 +75,9 @@ We first start exectuing these commands in order to install krb5-kdc, krb5-admin
 sudo apt-get update
 sudo apt-get install krb5-kdc krb5-admin-server krb5-config
 ```
+> **krb5-kdc :** provides the central authentication server for Kerberos.
+> **krb5-admin-server :** provides the administration server for the KDC.
+> **krb5-config :** provides configuration files and scripts for setting up and managing a Kerberos realm.
 
 When installing the packages, some prompts will appear in order to configure the KDC server
 
@@ -92,6 +95,8 @@ We now execute this command :
 sudo krb5_newrealm
 ```
 ![Realm](images/kdc/4.png)
+
+> **krb5_newrealm :** this command create a new Kerberso realm on a server. It will create new Kerberos database and administration server key, generate a new Kerberos configuration file for the new realm and set up the initial set of administrative principals and policies for the new realm.
 
 #### Adding The Principals:
 
@@ -133,6 +138,9 @@ We start by installing those packages
 sudo apt-get update
 sudo apt-get install krb5-user libpam-krb5 libpam-ccreds
 ```
+> **krb5-user :** provides command-line tools for interacting with a Kerberos system.
+> **libpam-krb5 :** PAM module that allows Linyx systems to authenticate users with Kerberos.
+> **libpam-ccreds :** PAM module that cashes user credentials for subsequent authetication requests.
 
 the same prompts as in the KDC server will appear and we need to enter the same informations used for the KDC server.
  - Realm : INSAT.TN
@@ -147,6 +155,8 @@ ktutil:  add_entry -password -p postgres/pg.insat.tn@INSAT.TN -k 1 -e aes256-cts
 ktutil:  wkt postgres.keytab
 ```
 ![Realm](images/keytab/1.png)
+
+> **Note :** a Kerberos keytab is a file containing the secret keys of Kerberos principals.
 
 We need to send the keytab from the KDC machine to the Service machine.
 To do that we need to install openssh server with this command
@@ -186,6 +196,9 @@ sudo apt-get install postgresql postgresql-contrib
 
 ```
 
+> **postgresql :** core libraby for PostreSQL database management system.
+> **postgresql-contrib :** collection of additional libraries and utilities.
+
 We start by creating role for the client:
 ![postgres db](images/postgresql/1.png)
 
@@ -196,12 +209,16 @@ krb_server_keyfile = '/home/safa/pgsql/data/postgres.keytab'
 ```
 ![postgres db](images/postgresql/2.png)
 
+> **Note :** "listen_addresses = '*'" means that the PostgreSQL server will listen on all available IP addresses and hostnames for incoming connections.
+
 In the file pg_hba.conf we add the following line
 ```
 # IPv4 local connections:
 hostgssenc  safa   safa  192.168.56.0/24    gss include_realm=0 krb_realm=INSAT.TN
 ```
 ![postgres db](images/postgresql/3.png)
+
+> **Note :** the added line specify that GSSAPI encryption should be used for the communication with the specified host 'safa' on the specified IP adress range '192.168.56.0/24' using the Kerberos realm 'INSAT.TN' for authentication.
 
 After these chagements we execute this command to restart the service
 ```
@@ -227,6 +244,9 @@ We can try by executing this command in the client machine:
 psql -d safa -h pg.insat.tn -U safa
 ```
 ![postgres db](images/test/1.png)
+
+> **Note :** the command is instructing to connect to PostreSQL server at 'pg.insat.tn' using the database safa and the username 'safa'
+
 The connectiong to PorstreSQL will fail because we don't have a TGT yet
 We generate one with this command:
 ```
