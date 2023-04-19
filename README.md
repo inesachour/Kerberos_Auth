@@ -18,7 +18,7 @@ __Kerberos__ is a protocol for authenticating service requests. It works on the 
 ![Kerberos](images/Introduction/Kerberos_process.png)
 
 __PostgreSQL__ is a well known relational database management system that uses SQL and is known for its performance, scalability, reliability, and security.
-<img src="images/Introduction/postgresql.pgn" alt="alt text" width="100" height="50">
+<img src="images/introduction/postgresql.png" alt="alt text" width="100" height="50">
 
 ## 1-Changing Hostnames
 
