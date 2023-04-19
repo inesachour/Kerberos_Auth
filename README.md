@@ -80,9 +80,9 @@ We first start exectuing these commands in order to install krb5-kdc, krb5-admin
 sudo apt-get update
 sudo apt-get install krb5-kdc krb5-admin-server krb5-config
 ```
-> **krb5-kdc :** provides the central authentication server for Kerberos.
-> **krb5-admin-server :** provides the administration server for the KDC.
-> **krb5-config :** provides configuration files and scripts for setting up and managing a Kerberos realm.
+> - **krb5-kdc :** provides the central authentication server for Kerberos.
+> - **krb5-admin-server :** provides the administration server for the KDC.
+> - **krb5-config :** provides configuration files and scripts for setting up and managing a Kerberos realm.
 
 When installing the packages, some prompts will appear in order to configure the KDC server
 
@@ -202,8 +202,8 @@ sudo apt-get install postgresql postgresql-contrib
 
 ```
 
-> **postgresql :** core libraby for PostreSQL database management system.
-> **postgresql-contrib :** collection of additional libraries and utilities.
+> - **postgresql :** core libraby for PostreSQL database management system.
+> - **postgresql-contrib :** collection of additional libraries and utilities.
 
 We start by creating role for the client:
 ```
