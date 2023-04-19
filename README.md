@@ -1,4 +1,4 @@
-# Kerberos Auth Project
+# PostgreSQL auth using Kerberos
 
 Made by : 
 [Amal Sammari](https://github.com/Amal1999)
@@ -18,8 +18,6 @@ Made by :
 ![Kerberos](images/intro/Kerberos_process.png)
 
 - __PostgreSQL__ is a well known relational database management system that uses SQL and is known for its performance, scalability, reliability, and security.
-
-![PostgreSQL](images/intro/postgresql.png)
 
 ## 1- Changing Hostnames
 
