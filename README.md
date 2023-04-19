@@ -15,12 +15,13 @@ Made by :
     3- The user decrypts the TGT and sends it to the ticket-granting server (TGS) for a service ticket.
     4- The TGS verifies the TGT and send a service ticket back.
     5- The user receives the service ticket and sends it to the service service and now he can access the requested service.
-![Kerberos](images/Introduction/Kerberos_process.png)
+![Kerberos](images/introduction/Kerberos_process.png)
 
 - __PostgreSQL__ is a well known relational database management system that uses SQL and is known for its performance, scalability, reliability, and security.
+
 ![PostgreSQL](images/introduction/postgresql.png)
 
-## 1-Changing Hostnames
+## 1- Changing Hostnames
 
 We start by executing this command
 ```
@@ -51,7 +52,7 @@ Client: 192.168.56.106
 > **Note** : All 3 machines need to have a Host-only Adapter.
 
 
-## 3-Adding IP Adresses in /etc/hosts files
+## 3- Adding IP Adresses in /etc/hosts files
 
 The next step is to add the IP adresses of the three machines in /etc/hosts files.
 We execute this command : 
@@ -87,7 +88,7 @@ nslookup kdc
 ![Ping](images/etc_hosts/ping1.png)
 
 
-## 4-Setting The KDC
+## 4- Setting The KDC
 
 Now that all our 3 machines can communicate we need to set the KDC server.
 We first start exectuing these commands in order to install krb5-kdc, krb5-admin-server and krb5-config libraries needed for this step:
@@ -152,7 +153,7 @@ kadmin.local:  list_principals
 ![Realm](images/kdc/all_principals.png)
 
 
-## 5-Setting The Service
+## 5- Setting The Service
 
 We start by installing those packages
 ```
@@ -262,7 +263,7 @@ sudo systemctl restart postgresql
 ```
 
 
-## 6-Setting The Client Machine
+## 6- Setting The Client Machine
 
 We start by installing those packages (same as the service server)
 ```
@@ -276,7 +277,7 @@ the same prompts as in the KDC server will appear and we need to enter the same 
  - Administrative Server : kdc.insat.tn
 
 
-## 7-Testing the authentication
+## 7- Testing the authentication
 
 We can try by executing this command in the client machine:
 ```
