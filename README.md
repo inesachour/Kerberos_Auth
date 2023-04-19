@@ -7,6 +7,7 @@ Made by :
 
 
 ## 1-Changing Hostnames
+
 We start by executing this command
 ```
 hostnamectl --static set-hostname kdc.insat
@@ -19,7 +20,9 @@ We do this step for the 2 other machines (service and client machines).
 
 (Client's hostname: client.insat.tn)
 
+
 ## 2- Getting IP Adresses
+
 Now we need to get the IP Adresses of all the three machines. We can use this command to do that
 ```
 hostname -I
@@ -32,6 +35,7 @@ Client: 192.168.56.106
 ```
 
 Note : All 3 machines need to have a Host-only Adapter.
+
 
 ## 3-Adding IP Adresses in /etc/hosts files
 
@@ -66,6 +70,7 @@ and in client machine we can try:
 ping kdc
 ```
 ![Ping](images/etc_hosts/ping1.png)
+
 
 ## 4-Setting The KDC
 
@@ -131,6 +136,7 @@ kadmin.local:  list_principals
 ```
 ![Realm](images/kdc/all_principals.png)
 
+
 ## 5-Setting The Service
 
 We start by installing those packages
@@ -187,7 +193,7 @@ ktutil:  list
 ![Realm](images/keytab/4.1.png)
 ![Realm](images/keytab/4.png)
 
-#### Installing and Configuring Postgresql
+#### Installing and Configuring PostgreSQL
 
 To install we execute :
 ```
@@ -200,7 +206,22 @@ sudo apt-get install postgresql postgresql-contrib
 > **postgresql-contrib :** collection of additional libraries and utilities.
 
 We start by creating role for the client:
+```
+create user safa with encryption password 'password';
+```
+
+We create a new database:
+```
+create database safa;
+```
+
+The we grant all privileges on the database to the role:
+```
+grant all privileges on database safa to safa;
+```
+
 ![postgres db](images/postgresql/1.png)
+
 
 Now we need to configure the "/etc/postgresql/12/main/postgresql.conf" file to change those two line
 ```
@@ -225,7 +246,9 @@ After these chagements we execute this command to restart the service
 sudo systemctl restart postgresql
 ```
 
+
 ## 6-Setting The Client Machine
+
 We start by installing those packages (same as the service server)
 ```
 sudo apt-get update
@@ -236,6 +259,7 @@ the same prompts as in the KDC server will appear and we need to enter the same 
  - Realm : INSAT.TN
  - Kerberos Server : kdc.insat.tn
  - Administrative Server : kdc.insat.tn
+
 
 ## 7-Testing the authentication
 
