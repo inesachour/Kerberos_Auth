@@ -178,7 +178,6 @@ ktutil:  list
 ![Realm](images/keytab/4.png)
 
 #### Installing and Configuring Postgresql
-Squid is a popular open-source caching proxy server that can be used to improve the performance of web servers by caching frequently accessed web pages and serving them from memory instead of fetching them from the web server each time they are requested.
 
 To install we execute :
 ```
