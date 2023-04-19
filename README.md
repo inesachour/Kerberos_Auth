@@ -144,9 +144,9 @@ We start by installing those packages
 sudo apt-get update
 sudo apt-get install krb5-user libpam-krb5 libpam-ccreds
 ```
-> **krb5-user :** provides command-line tools for interacting with a Kerberos system.<br>
-> **libpam-krb5 :** PAM module that allows Linyx systems to authenticate users with Kerberos.<br>
-> **libpam-ccreds :** PAM module that cashes user credentials for subsequent authetication requests.<br>
+> - **krb5-user :** provides command-line tools for interacting with a Kerberos system.
+> - **libpam-krb5 :** PAM module that allows Linyx systems to authenticate users with Kerberos.
+> - **libpam-ccreds :** PAM module that cashes user credentials for subsequent authetication requests.
 
 the same prompts as in the KDC server will appear and we need to enter the same informations used for the KDC server.
  - Realm : INSAT.TN
