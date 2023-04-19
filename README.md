@@ -102,11 +102,11 @@ sudo krb5_newrealm
 ```
 ![Realm](images/kdc/4.png)
 
-> **krb5_newrealm :** this command create a new Kerberso realm on a server. It will create new Kerberos database and administration server key, generate a new Kerberos configuration file for the new realm and set up the initial set of administrative principals and policies for the new realm.
+> **krb5_newrealm :** this command create a new Kerberos realm on a server. It will create new Kerberos database and administration server key, generate a new Kerberos configuration file for the new realm and set up the initial set of administrative principals and policies for the new realm.
 
 #### Adding The Principals:
 
-Now we need to add the principals needed(users and services are considered as principals)
+Now we need to add the principals needed (users and services are considered as principals)
 
 So we start with the admin principals:
 ```
@@ -114,14 +114,14 @@ sudo kadmin.local
 kadmin.local:  add_principal root/admin
 ```
 
-We verify that the principal is created
+We can verify that the principal is created
 ```
 kadmin.local:  list_principals
 ```
 
 Next, we need to grant all access rights to the Kerberos database to admin principal root/admin in the configuration file /etc/krb5kdc/kadm5.acl
 ```
-sudo gedit /etc/krb5kdc/kadm5.acl
+sudo nano /etc/krb5kdc/kadm5.acl
 ```
 ![Realm](images/kdc/admin_principal3.png)
 
@@ -208,7 +208,7 @@ sudo apt-get install postgresql postgresql-contrib
 
 We start by creating role for the client:
 ```
-create user safa with encryption password 'password';
+create user safa with encryption password 'safa';
 ```
 
 We create a new database:
@@ -220,7 +220,7 @@ The we grant all privileges on the database to the role:
 ```
 grant all privileges on database safa to safa;
 ```
-
+(in the screenshot the role 'safa' already exists so we created another role just for then demonstration)
 ![postgres db](images/postgresql/1.png)
 
 
@@ -270,7 +270,7 @@ psql -d safa -h pg.insat.tn -U safa
 ```
 ![postgres db](images/test/1.png)
 
-> **Note :** the command is instructing to connect to PostreSQL server at 'pg.insat.tn' using the database safa and the username 'safa'
+> **Note :** the command is instructing to connect to PostreSQL server at 'pg.insat.tn' using the database 'safa' and the username 'safa'
 
 The connectiong to PorstreSQL will fail because we don't have a TGT yet
 We generate one with this command:
