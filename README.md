@@ -34,7 +34,7 @@ Service: 192.168.56.105
 Client: 192.168.56.106
 ```
 
-Note : All 3 machines need to have a Host-only Adapter.
+> **Note** : All 3 machines need to have a Host-only Adapter.
 
 
 ## 3-Adding IP Adresses in /etc/hosts files
